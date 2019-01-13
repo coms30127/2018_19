@@ -92,10 +92,10 @@
 \begin{center}
 \begin{tikzpicture}
 
-\node[center,text height=0.35cm](nt){neurons types};
+\node[center,text height=0.35cm](nt){c \textbf{neurons types}};
 
-\node[center,text height=0.35cm,right = 2cm of nt](sc){some maths};
-\node[center,text height=0.35cm,above = 2cm of sc](tb){the brain};
+\node[center,text height=0.35cm,right = 2cm of nt](sc){b \textbf{maths}};
+\node[center,text height=0.35cm,above = 2cm of sc](tb){a \textbf{the brain}};
 
 
 \path (tb) edge[->,line width=2pt](sc);
@@ -103,35 +103,35 @@
 
 
 
-\node[neuron,text height=0.35cm,above = 2cm of nt](on){MP neurons};
-\node[applic,text height=0.35cm,above = 2cm of on](hpc){hippocampus};
+\node[neuron,text height=0.35cm,above = 2cm of nt](on){d \textbf{MP neurons}};
+\node[applic,text height=0.35cm,above = 2cm of on](hpc){e \textbf{hippocampus}};
 
 \path (nt) edge[->,line width=2pt](on);
 \path (on) edge[<->,line width=2pt](hpc);
 
-\node[neuron,text height=0.35cm,above left = 2cm of nt](rn){rate neurons};
-\node[applic,text height=0.35cm,above left = 2cm of rn](vis){vision};
+\node[neuron,text height=0.35cm,above left = 2cm of nt](rn){f \textbf{rate neurons}};
+\node[applic,text height=0.35cm,above left = 2cm of rn](vis){g \textbf{vision}};
 
 \path (nt) edge[-,line width=2pt,style=dashed](rn);
 \path (rn) edge[<->,line width=2pt](vis);
 
 
-\node[neuron,text height=0.35cm,left = 2cm of nt](ln){LIF neurons};
-\node[applic,text height=0.35cm,left = 2cm of ln](pla){features};
+\node[neuron,text height=0.35cm,left = 2cm of nt](ln){h \textbf{LIF neurons}};
+\node[applic,text height=0.35cm,left = 2cm of ln](pla){i \textbf{features}};
 
 \path (nt) edge[-,line width=2pt,style=dashed](ln);
 \path (ln) edge[<->,line width=2pt](pla);
 
 
-\node[neuron,text height=0.35cm,below left = 2cm of nt](hn){HH neurons};
-\node[applic,text height=0.35cm,below left = 2cm of hn](pat){patterns};
+\node[neuron,text height=0.35cm,below left = 2cm of nt](hn){j \textbf{HH neurons}};
+\node[applic,text height=0.35cm,below left = 2cm of hn](pat){k \textbf{patterns}};
 
 \path (nt) edge[-,line width=2pt,style=dashed](hn);
 \path (hn) edge[<->,line width=2pt](pat);
 
 
-\node[neuronfaded,text height=0.35cm,below = 2cm of nt](nm){\textcolor{gray}{neural mass}};
-\node[applicfaded,text height=0.35cm,below = 2cm of nm](eeg){\textcolor{gray}{fmri / eeg}};
+\node[neuronfaded,text height=0.35cm,below = 2cm of nt](nm){\textcolor{gray}{l \textbf{neural mass}}};
+\node[applicfaded,text height=0.35cm,below = 2cm of nm](eeg){\textcolor{gray}{m \textbf{fmri / eeg}}};
 
 \path (nt) edge[-,line width=1pt,draw=gray,style=dashed](nm);
 \path (nm) edge[<->,line width=1pt,draw=gray](eeg);
@@ -172,38 +172,43 @@ The last two sections are aspirational, it is likely there will not be time to d
 This is a rough guide, it might change as the course progresses.
 
 \begin{enumerate}
-\item Introduction to the course and to the brain. (a)
-\item More on the brain. (a)
 
-\item Yet more on the brain. (a)
-\item Scientific programming in Python or Julia. (b)
+\item Introduction to the course and to the brain. (a 01-29 Conor)
+\item More on the brain. (a 01-31 Conor)
 
-\item Introduction to differential equations. (b)
-\item Numerical solutions to differential equations. (b)
+\item Scientific programming in Python or Julia. (b 02-05 Conor)
+\item Introduction to differential equations. (b 02-07 Conor)
 
-\item Modelling neurons. (c)
-\item The McCullough-Pitts neuron and Hebbian plasticity. (d)
+\item Numerical solutions to differential equations. (b 02-12 Conor)
 
-\item The Hippocampus. (e)
-\item CA3 as a auto-associative memory, pattern seperation. (e)
+\item Modelling neurons. (c 02-14 Cian)
+\item The McCullough-Pitts neuron and Hebbian plasticity. (d 02-19 Cian)
 
-\item Firing rates, dealing with neuronal data, receptive fields. (f)
-\item The visual system. (g)
+\item The Hippocampus. (e 02-21 Cian)
+\item CA3 as a auto-associative memory, pattern seperation. (e 02-26 Cian)
 
-\item V1 and sparse coding. (g)
-\item Spikes and analysing spike date. (h)
+\item Firing rates, dealing with neuronal data, receptive fields. (f 02-28 Cian)
 
-\item Simple models of neurons: leaky integrate and fire neurons. FI curves (h)
-\item Synapses and synaptic plasticity. (i)
+\item Reading week.
+  
+\item The visual system. (g 03-12 Cian)
 
-\item STDP and feature extraction. (i)
-\item Ion channels. (j)
+\item V1 and sparse coding. (g 03-14 Cian)
+\item Spikes and analysing spike date. (h 03-19 Cian)
 
-\item The Hodgkin-Huxley equation and spikes. (j)
-\item Dynamical systems approachs, the Morris-Lecar model, phase diagrams. (j/k)
+\item Simple models of neurons: leaky integrate and fire neurons. FI curves (h 03-21 Cian)
+\item Synapses and synaptic plasticity. (i 03-26 Rui)
+\item Long term plasticity. (i 03-28 Rui)
+\item STDP and feature extraction. (i 04-02 Rui)
+\item Ion channels. (j 04-04 Conor)
 
-\item Central pattern generators, bursting. (k)
-\item Spare lecture.
+\item Easter break.
+  
+\item The Hodgkin-Huxley equation and spikes. (j 04-30 Conor)
+\item Dynamical systems approachs, the Morris-Lecar model, phase diagrams. (j/k 05-02 Conor)
+
+\item Central pattern generators, bursting. (k 05-07 Conor)
+\item Spare / guest / revision lecture. (05-09)
 
 \end{enumerate}
 
