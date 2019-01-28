@@ -129,18 +129,16 @@
 \path (nt) edge[-,line width=2pt,style=dashed](hn);
 \path (hn) edge[<->,line width=2pt](pat);
 
+% \node[neuronfaded,text height=0.35cm,below = 2cm of nt](nm){\textcolor{gray}{l \textbf{neural mass}}};
+% \node[applicfaded,text height=0.35cm,below = 2cm of nm](eeg){\textcolor{gray}{m \textbf{fmri / eeg}}};
 
-\node[neuronfaded,text height=0.35cm,below = 2cm of nt](nm){\textcolor{gray}{l \textbf{neural mass}}};
-\node[applicfaded,text height=0.35cm,below = 2cm of nm](eeg){\textcolor{gray}{m \textbf{fmri / eeg}}};
+% \path (nt) edge[-,line width=1pt,draw=gray,style=dashed](nm);
+% \path (nm) edge[<->,line width=1pt,draw=gray](eeg);
 
-\path (nt) edge[-,line width=1pt,draw=gray,style=dashed](nm);
-\path (nm) edge[<->,line width=1pt,draw=gray](eeg);
-
-\path (on) edge[->,line width=2pt](rn);
-\path (rn) edge[->,line width=2pt](ln);
-\path (ln) edge[->,line width=2pt](hn);
-\path (hn) edge[->,line width=1pt,draw=gray](nm);
-
+% \path (on) edge[->,line width=2pt](rn);
+% \path (rn) edge[->,line width=2pt](ln);
+% \path (ln) edge[->,line width=2pt](hn);
+% \path (hn) edge[->,line width=1pt,draw=gray](nm);
 
 \end{tikzpicture}
 \end{center}
@@ -162,11 +160,9 @@
 \item \textbf{\textcolor{red}{HH neurons:}} Ion channels and Hodgkin-Huxley neurons;
   Morris-Lecar and other models.
 \item \textbf{\textcolor{green}{patterns:}} Some ideas from dynamical systems, central pattern generators.
-\item \textbf{\textcolor{red}{neural mass:}} Neural mass models and field equations for neurons.
-\item \textbf{\textcolor{green}{fmri / eeg:}} From neurons to the brain; modelling the interactions of brain regions.
+% \item \textbf{\textcolor{red}{neural mass:}} Neural mass models and field equations for neurons.
+% \item \textbf{\textcolor{green}{fmri / eeg:}} From neurons to the brain; modelling the interactions of brain regions.
 \end{enumerate}
-
-The last two sections are aspirational, it is likely there will not be time to discuss them and they will not be examined.
 
 \section*{Rough lecture list}
 This is a rough guide, it might change as the course progresses.
@@ -185,11 +181,11 @@ This is a rough guide, it might change as the course progresses.
 \item The McCullough-Pitts neuron and Hebbian plasticity. (d 02-19 Cian)
 
 \item The Hippocampus. (e 02-21 Cian)
-\item CA3 as a auto-associative memory, pattern seperation. (e 02-26 Cian)
+\item CA3 as a auto-associative memory, pattern separation. (e 02-26 Cian)
 
 \item Firing rates, dealing with neuronal data, receptive fields. (f 02-28 Cian)
 
-\item Reading week.
+\item Reading week (week 18)
   
 \item The visual system. (g 03-12 Cian)
 
@@ -200,15 +196,15 @@ This is a rough guide, it might change as the course progresses.
 \item Synapses and synaptic plasticity. (i 03-26 Rui)
 \item Long term plasticity. (i 03-28 Rui)
 \item STDP and feature extraction. (i 04-02 Rui)
-\item Ion channels. (j 04-04 Conor)
+\item T.B.D. (04-04)
 
-\item Easter break.
+\item Easter break (3 weeks).
   
-\item The Hodgkin-Huxley equation and spikes. (j 04-30 Conor)
-\item Dynamical systems approachs, the Morris-Lecar model, phase diagrams. (j/k 05-02 Conor)
+\item Ion channels. (j 04-30 Conor)
+\item The Hodgkin-Huxley equation and spikes. (j/k 05-02 Conor)
 
-\item Central pattern generators, bursting. (k 05-07 Conor)
-\item Spare / guest / revision lecture. (05-09)
+\item Dynamical systems approachs, the Morris-Lecar model, phase diagrams. (k 05-07 Conor)
+\item Central pattern generators, bursting. (k 05-09 Conor)
 
 \end{enumerate}
 
