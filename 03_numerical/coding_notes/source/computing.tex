@@ -1,0 +1,648 @@
+\documentclass[11pt,a4paper]{scrartcl}
+\typearea{12}
+\usepackage{graphicx}
+\usepackage{pstricks}
+\usepackage{listings}
+\lstset{language=python}
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\lfoot{\texttt{COMS30127.github.io}}
+\lhead{Computation Neuroscience - computing (b) - Conor}
+\rhead{\thepage}
+\newcommand{\lnn}[1]{\textbf{line #1}\,}
+\newcommand{\Lnn}[1]{\textbf{Line #1}\,}
+
+\lstdefinelanguage{Julia}%
+  {morekeywords={abstract,break,case,catch,const,continue,do,else,elseif,%
+      end,export,false,for,function,immutable,import,importall,if,in,%
+      macro,module,otherwise,quote,return,switch,true,try,type,typealias,%
+      using,while},%
+   sensitive=true,%
+%   alsoother={$},%
+   morecomment=[l]\#,%
+   morecomment=[n]{\#=}{=\#},%
+   morestring=[s]{"}{"},%
+   morestring=[m]{'}{'},%
+}[keywords,comments,strings]%
+\lstset{%
+    language         = Julia,
+    basicstyle       = \ttfamily,
+    keywordstyle     = \bfseries\color{blue},
+    stringstyle      = \color{magenta},
+    commentstyle     = \color{ForestGreen},
+    showstringspaces = false,
+}
+
+\begin{document}
+\section*{Computing}
+These are getting started notes on Python, the name of the
+corresponding example program is given in brackets in a fixed width
+font (\texttt{fixed width font}) just before the code listing.
+\subsection*{Computing in Computational Neuroscience}
+People in computational neuroscience usually use either MATLAB or
+Python or they use a specialized simulation tool such as GENESIS or
+NEURON or NEST. These simulation tools are optimized to efficiently
+simulate large complicated neurons, in the case of GENESIS or NEURON,
+or large and complicated networks of neurons, in the case of NEST. The
+simulation tools have been writen over many years and can be quite
+complicated and idiosyncratic, however, NEURON at least, now has a
+Python interface. 
+
+MATLAB has some advantages, it has a very large user base across many
+parts of applied mathematics, a huge collection of libraries and
+package. There is a free community authored version called Octave,
+they are not completely compatible and Octave lacks many libraries and
+features. Matlab uses a matrix paradigm which is easy to use and quick
+when you get used to it. Python is a proper programming language, with
+a nicer language structure than Matlab, it is free and open and has
+many libraries, though perhaps not as many as Matlab.
+
+Other commonly used tools include Brian, a Python based package which
+supplies efficient specification and integration of differential
+equations used in neuronal simulations, XPP which is useful for
+analysing the dynamics of the differential equations used in
+neuroscience, NeuroML which is a meta-language for describing neuronal
+models and R which is used for statistics.
+
+These notes are only the roughest of introductions to Python, remember
+google and stackoverflow are your friends.
+
+\subsection*{Python - getting started}
+Python either runs as a script or on an interpreter. To get the
+interpreter you type \texttt{python} on the command line and you get
+something that looks like this:
+\begin{lstlisting}[numbers=right]
+Python 2.7.6 (default, Jun 22 2015, 17:58:13) 
+[GCC 4.8.2] on linux2
+Type "help", "copyright", "credits" or "license" for more information.
+>>> 
+>>> 
+>>> 
+\end{lstlisting}
+where the numbers on the right are just for these notes. The
+\lq{}2.7.6\rq{} is the version number; one annoying thing about Python
+is that Python 3 and higher are not fully backwards compatible with
+Python 2, and it takes a while to force yourself to make the jump.
+
+You can use python on the interpreter as a glorified calculator
+\begin{lstlisting}[numbers=right]
+>>> 5+6
+11
+>>> 12/9.0
+1.3333333333333333
+>>> 
+\end{lstlisting}
+It has big numbers which can be useful sometimes
+\begin{lstlisting}[numbers=right]
+>>> 2**200
+1606938044258990275541962092341162602522202993782792835301376L
+\end{lstlisting}
+The \texttt{L} at the end is because it is a long number. To get
+special functions and so forth you need to \texttt{import} the math
+package 
+\begin{lstlisting}[numbers=right]
+>>> import math
+>>> math.tan(math.pi/4.0)
+0.9999999999999999
+\end{lstlisting}
+
+The syntax for the python math package is more or less the same as for
+\texttt{math.h} in C or \texttt{cmath} in C++. Notice there is a namespace,
+you need to write \texttt{math.tan(math.pi/4.0)}. If you want to
+import the functions and so on into your namespace you use
+\texttt{from}, eg
+\begin{lstlisting}[numbers=right]
+>>> from math import tan 
+>>> from math import pi
+>>> tan(pi/4.0)
+0.9999999999999999
+\end{lstlisting}
+and, if you want to import everything from \texttt{math} into your current namespace it is 
+\begin{lstlisting}[numbers=right]
+>>> from math import *
+>>> sin(pi)
+1.2246467991473532e-16
+\end{lstlisting}
+
+Of course, we don't want to use it as an interpreter for anything very
+complicated, so we write scripts. However, as an interpreted language
+you don't compile it, so if you have a program called \texttt{foo.py}
+you write
+\begin{lstlisting}[numbers=right]
+> python foo.py
+\end{lstlisting}
+to run it, here the \lq{}$>$\rq{} denotes the command
+prompt. Alternatively, you can add a shebang to \texttt{foo.py}, so in
+my case I would add \texttt{$\#!$/usr/bin/python} as the first line of
+\texttt{foo.py} and change \texttt{foo.py} to executable by typing
+\texttt{chmod u+x foo.py} and then I can run \texttt{foo.py} directly
+\begin{lstlisting}[numbers=right]
+> ./foo.py
+\end{lstlisting}
+Of course, you might need to change \texttt{/usr/bin/python} to
+something else on your machine, it depends on the output of
+\texttt{which python}.
+
+\subsubsection*{Python - some basics}
+There are lots of introductions to Python on the web and that's
+probably the best place to look. Variables are not declared (\texttt{hello\_world.py})
+\begin{lstlisting}[numbers=right]
+hello = "hello world"
+print hello
+\end{lstlisting}
+prints hello. It has a nice slice notation  (\texttt{hello\_world\_slice.py})
+\begin{lstlisting}[numbers=right]
+hello = "hello world"
+print hello[0]
+print hello[1:4]
+print hello[-1]
+\end{lstlisting}
+prints \texttt{h}, \texttt{ell} and \texttt{d}, \texttt{hello[-1]}
+gives the last character. 
+
+One of the most distinctive features is that blocks are created by
+indenting rather than brackets. In  (\texttt{hello\_world\_for.py})
+\begin{lstlisting}[numbers=right]
+hello = "hello world"
+
+for a in hello:
+    print a,
+print 
+\end{lstlisting}
+the block for the for loop is \texttt{print a,} because of the indent,
+note the colon after the \texttt{for} statement too. This sort of for
+loop, looping over parts of an object, is considered more pythonic
+than the indexed loops in C++ and so on, this is possible though  (\texttt{hello\_world\_indexed.py})
+\begin{lstlisting}[numbers=right]
+hello = "hello world"
+
+for i in range(0,len(hello)):
+    print hello[i],
+print 
+\end{lstlisting}
+If you do want the index and the object it refers to you should use an
+enumeration\\(\texttt{hello\_world\_enumeration.py}):
+\begin{lstlisting}[numbers=right]
+hello = "hello world"
+
+for i,a in enumerate(hello):
+    print i,a
+print 
+\end{lstlisting}
+The if statement is also indented, well all blocks are, but for completeness  (\texttt{if.py})
+\begin{lstlisting}[numbers=right]
+import random
+
+a=random.randint(1,3)
+
+if a==1:
+    print 'one'
+elif a==2:
+    print 'two'
+else:
+    print 'three'
+\end{lstlisting}
+
+
+For some reason what are called arrays or vectors in other languages
+are called lists in python  (\texttt{if.py})
+\begin{lstlisting}[numbers=right]
+hello = "hello world"
+
+letters = []
+
+for a in hello:
+    letters.append(a)
+
+print letters
+\end{lstlisting}
+Lists need not be heterogenous  (\texttt{hetro\_list.py})
+\begin{lstlisting}[numbers=right]
+list=[72,79,86,96,103,"Cathedral Parkway"]
+print list
+\end{lstlisting}
+Python also has a tuple type, like a list but immutable. The
+\texttt{enumerate} we saw above makes an \texttt{enumerate} object,
+but you can cast it to a list of tuples (\texttt{enumerate\_object.py}):
+\begin{lstlisting}[numbers=right]
+hello = "hello world"
+
+print enumerate(hello) 
+
+print list(enumerate(hello)) 
+\end{lstlisting}
+
+One thing about Python that is hard to get used to if you are used to
+C or C++ is that what I keep calling variables are more correctly
+thought of as labels, they name memory locations rather than pieces of
+data. This often catches me out, to see the difference look at
+(\texttt{labels.py})
+\begin{lstlisting}[numbers=right]
+a = [0,1,2]
+b = a
+
+print a
+print b
+
+b[1]=-1
+
+print a
+print b
+\end{lstlisting}
+and note that changing \texttt{b[1]} has changed the value of \texttt{a[1]}.
+
+\subsubsection*{Python - functional features}
+
+Python has some stylish functional programming feactures for working
+with lists, for example \texttt{map} does a function on all the
+elements in a sequence so (\texttt{map.py})
+\begin{lstlisting}[numbers=right]
+def cube(x):
+    return x*x*x
+
+numbers = [1,2,3,4,5]
+
+cubes = map (cube,numbers)
+
+print cubes
+\end{lstlisting}
+where you should also note the syntax for defining functions, there
+are functions and classes in the usual way, though classes have no
+private members. In fact this code can be made more streamlined, there
+is a construction for avoiding giving names to things that don't need
+to be named  (\texttt{map\_lambda.py}):
+\begin{lstlisting}[numbers=right]
+numbers = [1,2,3,4,5]
+
+cubes = map (lambda x:x*x*x,numbers)
+
+print cubes
+\end{lstlisting}
+In fact, there is also a list comprehension type construction that also does the same thing
+\begin{lstlisting}[numbers=right]
+numbers = [1,2,3,4,5]
+
+cubes = [x*x*x for x in numbers]
+
+print cubes
+\end{lstlisting}
+
+Python contains a number of these functional commands in addition to
+\texttt{map} and a number of different data structures, part of the
+skill of writing \lq{}pyhtonic\rq{} code is to make these work for
+you.
+
+The class construction has a few annoyances; for example each class
+can only have one constructor, which is defined using the
+\texttt{\_\_init\_\_} function  (\texttt{class\_example.py}).
+\begin{lstlisting}[numbers=right]
+class Counter:
+
+     def  __init__(self,value):
+          self.value=value
+
+     def add(self,increment)
+          self.value+=increment
+
+counter=Counter(5)
+
+print counter.value
+
+counter.add(7)
+
+print counter.value
+
+counter.value+=3
+
+print counter.value
+
+\end{lstlisting}
+Member variables have the \texttt{self} prefix and notice that if a
+class function uses a member variable then \texttt{self} has to be one
+of its arguments. Finally, as mentioned before the member variables
+are not private.
+
+
+\subsubsection*{Scientific calculation packages}
+
+Python has a huge number of packages. For an introduction to some of
+them in the context of a very annoying / fun puzzle try
+\texttt{http://www.pythonchallenge.com/}. Here we will quickly
+introduce packages commonly used in scientific computing 
+\begin{itemize}
+\item \textsl{Numpy} This adds matrix and vector datatypes and enables
+  fast vectorized calculations, it also includes methods for finding
+  eigenvectors and eigenvalues.
+\item \textsl{Scipy} This adds various numerical routines for working out things like integrals and the solution to differential equations.
+\item \textsl{matplotlib} Plots stuff.
+\end{itemize}
+
+Here \texttt{numpy} is imported with the name \texttt{np}  (\texttt{np\_array.py})
+\begin{lstlisting}[numbers=right]
+import numpy as np
+d1=np.array([1,-1,1])
+d2=np.array([1,2,1])
+print d1
+print d2
+print d1*d2
+print np.dot(d1,d2)
+\end{lstlisting}
+so we define two numpy arrays, we see that \texttt{*} gives element-by-element multiplication, whereas \texttt{np.dot(d1,d2)} gives the dot product. We can do matrix multiplication as well  (\texttt{np\_matrix.py})
+\begin{lstlisting}[numbers=right]
+import numpy as np
+d1=np.array([(1,-1,1),(1,2,1),(1,-1,1)])
+print d1
+d2=np.array([1,3,1])
+print d2
+print np.dot(d1,d2)
+\end{lstlisting}
+and lots of linear algebra  (\texttt{np\_det.py})
+\begin{lstlisting}[numbers=right]
+import numpy as np
+d1=np.array([(1,-1,3),(1,2,1),(3,1,1)])
+print np.linalg.det(d1)
+\end{lstlisting}
+
+As for \texttt{matplotlib} here is a simple example  (\texttt{plot.py})
+\begin{lstlisting}[numbers=right]
+import numpy as np
+import matplotlib.pyplot as plt
+
+x = np.linspace(0, 10)
+plt.plot(x, np.sin(x), linewidth=2)
+
+plt.savefig("example.png")
+
+plt.show()
+\end{lstlisting}
+It both saves the plot as \texttt{example.png} and shows it on the screen.
+
+
+\subsection*{Julia}
+\lstset{language=python}
+Julia is a new programming language that runs much faster than Python;
+it is possible to write fast code in MATLAB where everything is
+written as linear algebra or using carefully optimized numpy or fancy
+just-in-time compilation in Python; the idea of Julia is that it runs
+at C-like speeds for natural, modern-looking code. It does this by
+allowing, while not requiring, type declaration and by not having
+classes, instead it has \textsl{types}, a bit like \textsl{structs} in
+C, and multiple dispatch. 
+
+It has other features to make it useful for scientific computing,
+little things like being able to \texttt{2v} when you mean
+\texttt{2*v}, along with big things, like a sophisticated
+multi-dimensional array datatype that can be used for efficient matrix
+operations. Presumably to help persuade people to finally abandon
+MATLAB it has a MATLAB-like syntax, blocks are denoated using a
+\texttt{end} keyword, the first element of an array \texttt{a} is
+\texttt{a[1]} and \texttt{1:10} means one to ten, not one to nine.
+
+If you are used to Python, Julia can seem frustrating to debug, mostly
+because the typing can be hard to get used to, but debugging Julia as
+a Python programmer really reminds you how often you cast variables
+without even noticing; this is part of why Julia is much faster.
+
+This only outlines the simplest parts of the language, the wikibook
+\begin{quote}
+https://en.wikibooks.org/wiki/Introducing\_Julia/
+\end{quote}
+is a good place to look for a longer introduction. There is online Julia at
+\begin{quote}
+https://juliabox.com/
+\end{quote}
+
+\subsubsection*{A simple example}
+
+Here is a programme to add powers of two (\texttt{add.jl}):
+\begin{lstlisting}[numbers=right]
+highest_power=10
+
+value=1.0::Float64
+current=0.5::Float64
+
+for i in 1:highest_power
+   value+=current
+   current*=0.5
+end
+
+println(value)
+\end{lstlisting}
+\Lnn{1} defined \texttt{highest\_power}; this is dynamically typed, as
+in Python, but \texttt{value} and \texttt{current} are given a type,
+\texttt{Float64}; as an indication of how seriously it takes typing,
+is \lnn{3} was \texttt{value=1::Float64} it would return an error
+since \texttt{1} isn't a \texttt{Float64}. You can find a full list of
+types in the wikibook, it has lots of different int and float types,
+along with rational numbers using \texttt{//} to seperate numerator and divisor (\texttt{rational.jl}):
+\begin{lstlisting}[numbers=right]
+a=2//3
+b=1//2
+println(a-b)
+\end{lstlisting}
+
+\subsection*{Arrays}
+Arrays are what Python calls lists, python is the odd one out here,
+array is a more common name. Julia has the same slicing functionality
+as Python, although as mentioned above indexing is different (\texttt{slice.jl})
+\begin{lstlisting}[numbers=right]
+a=[1,2,3,4,5]
+println(a[1:3])
+
+for i in a
+   println(i)
+end
+
+\end{lstlisting}
+prints \texttt{[1,2,3]} from \lnn{2}, \lnn{4} to \lnn{6} demonstrates
+a for loop. The last element in an array is indexed \texttt{end} so in
+the programme above \texttt{a[end]} is \texttt{5}.
+
+Arrays can store mixed items, but the array can be typed, so \texttt{a} in (\texttt{typed\_list.jl})
+\begin{lstlisting}[numbers=right]
+a=Int64[1,2,3,4,5]
+push!(a,6)
+println(a)
+\end{lstlisting}
+can only store items of type \texttt{Int64}. \texttt{push!} pushes an
+item onto the list, like \texttt{append} in Python, again, this is the
+more common notation. The \texttt{!} is part of an convention where
+all commands that change an array have a \texttt{!}.
+
+As mentioned above, Julia arrays can be multidimensional and have
+matrix like operations, but this won't be explored in this brief
+overview. There is also a tuple type which is immutable.
+
+\subsubsection*{Functions}
+Here is a programme with some functions (\texttt{functions.jl})
+\begin{lstlisting}[numbers=right]
+function add_to_int(a::Integer,b::Integer)
+	 println("int version")
+	 a+b
+end
+
+function add_to_int(a::Real,b::Real)
+	 println("float version")
+	 convert(Int64,a+b)
+end
+
+function add_to_int(a,b)
+	 println("what are these things")
+	 0
+end
+
+println(add_to_int(12,6))
+println(add_to_int(12.0,6.0))
+\end{lstlisting}
+Obviously this is a very artificial example, but it shows some of the
+features of functions, first, their return value is the most recently
+evaluated expression and second, and more importantly, they support
+multiple dispach; the function is chosen to match the type of the
+arguments, here there is one function for \texttt{Integers}, this is a
+supertype which includes, for example, \texttt{Int64}, there is one
+for \texttt{Real}, the supertype that includes various floats, and one
+with no type; the correct function is used for each. If there is no
+correct fuction there will be an error.
+
+There is also a terse \lq{}mathematical functions\rq{} style function
+syntax that is useful, well, for functions that do the sort of things
+mathematical functions do (\texttt{math\_fxn.jl})
+\begin{lstlisting}[numbers=right]
+
+f(x,y)=2x+y
+
+println(f(1,3))
+
+\end{lstlisting}
+You can also return more than one value (\texttt{multiple\_return.jl})
+\begin{lstlisting}[numbers=right]
+function powers(x)
+	 x,x^2,x^3
+end
+
+multiples(x::Float64) = x,2x,3x
+
+a,b,c=powers(2)
+
+println(a,' ',b,' ',c)
+
+a,b,c=multiples(2)
+
+println(a,' ',b,' ',c)
+
+\end{lstlisting}
+
+
+\subsubsection*{Composite Types}
+Julia doesn't have classes, this comes as a surprise at first, but it
+does have composite data types that work like structs, combining this
+with multiple dispach captures important parts of the functionality of
+classes, in a way that supports fast code (\texttt{struct\_example.jl}
+\begin{lstlisting}[numbers=right]
+mutable struct Cow
+	name::String
+	age::Int64
+end
+
+mutable struct Poem
+	name::String
+end	
+
+function move(cow::Cow)
+	 print(cow.name," walks forward") 
+         println("showing the weight of her ",cow.age," years")
+end
+
+function move(poem::Poem)
+	 println(poem.name, " moves us to tears with its beauty")
+end
+
+poem = Poem("The Red Wheelbarrow")
+cow = Cow("Hellcow",42)
+
+move(cow)
+move(poem)
+\end{lstlisting}
+You can see that although the structs have no methods, the function
+\texttt{move} can have different meaning for the two different data
+types. The default constructor defines the variables in the order they
+appear, it is possible to define other constructors, but that won't be
+considered here.
+
+You can write constructors for these structs as ordinary functions; you can also use the key word \texttt{new} to write internal constructors, these serve, typically, to impose constraints on the input, see \texttt{constructor.jl}
+\begin{lstlisting}[numbers=right]
+struct Joke
+
+    question::String
+    answer::String
+
+    function Joke(question::String,answer::String)
+        if question[end]!="?"
+            question=string(question,"?")
+        end
+        new(question,answer)
+    end
+
+end
+
+function make_joke()
+    Joke("what weapon does a fat jedi use","a heavy sabre")
+end
+
+joke=make_joke()
+
+println(joke.question)
+println(joke.answer)
+\end{lstlisting}
+
+\subsubsection*{Making functions}
+
+Functions are objects just like any other, so they can be returned
+like other objects (\texttt{make\_function\_1.jl}):
+\begin{lstlisting}[numbers=right]
+function make_adder(a::Int64)
+    function adder(b::Int64)
+        a+b
+    end
+end
+
+three_adder=make_adder(3)
+two_adder=make_adder(2)
+
+println(two_adder(5)," ",three_adder(5))
+\end{lstlisting}
+or even (\texttt{make\_function\_2.jl})::
+\begin{lstlisting}[numbers=right]
+
+function make_adder(a::Int64)
+    b::Int64->a+b
+end
+
+three_adder=make_adder(3)
+two_adder=make_adder(2)
+
+println(two_adder(5)," ",three_adder(5))
+\end{lstlisting}
+
+\subsubsection*{Plotting}
+
+Julia doesn't have it's own plotting package but it has several
+packages that wrap other plotting packages, it even has one for
+gnuplot. One easy example is the package \texttt{PyPloy} which gives
+access to \texttt{matplotlib} in Python. The package first needs to be
+installed, to do this open Julia on the command line and in the REPL
+type \texttt{Pkg.add(\lq{}PyPlot\rq{})}; this needs to only be done
+once, then, you can do things like this (\texttt{matplotlib\_example.jl})
+\begin{lstlisting}[numbers=right]
+import PyPlot; 
+const plt = PyPlot
+
+x = linspace(0,2*pi,1000); y = sin.(3 * x + 4 * cos.(2 * x));
+plt.plot(x, y, color="red", linewidth=2.0, linestyle="--")
+plt.title("A sinusoidally modulated sinusoid")
+plt.show()
+\end{lstlisting}
+
+
+\end{document}
+
