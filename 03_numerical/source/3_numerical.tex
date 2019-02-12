@@ -1,0 +1,250 @@
+\documentclass[12pt]{article}
+\usepackage{amsfonts, epsfig}
+
+\usepackage{graphicx}
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\lfoot{\texttt{coms30127.github.io}}
+\lhead{Computation Neuroscience - 3\_numerical (b) - Conor}
+\rhead{\thepage}
+\cfoot{}
+\begin{document}
+
+\section*{Numerical integration of differential equations} 
+
+This chapter is about the Taylor series and about the numerical
+solution of differential equations; two methods are considered, the
+Euler method and the Runge Kutta method. These are the most
+straight-forward way to solve differential equations on a computer,
+there are other methods that are commonly used in neuroscience, like
+backwards Runge Kutta and adaptive timestep methods, but these are
+easy enough to understand in the future once you know about Euler and
+Runge Kutta.
+
+\subsection*{The Taylor series}
+
+As an introduction it is often useful to use a series description of
+functions. This can help with numerical calculations of the values and
+it can be useful in studying properties of the function. Here, it will
+be used to work out how to efficiently calculate the solutions to
+differential equations. The Taylor series is one commonly applicable
+approach to representing a function as a series.
+
+Imagine you have a function $f(t)$ that can be represented as a series
+\begin{equation}
+f(t)=\sum_{n=0}^\infty{a_nt^n}=a_0+a_1t+a_2t^2+\ldots
+\end{equation}
+Now, putting $t=0$ we get
+\begin{equation}
+f(0)=a_0
+\end{equation}
+Next, differentiate
+\begin{equation}
+\frac{df(t)}{dt}=a_1+2a_2t+3a_3t^2+\ldots=\sum_{n=1}^\infty{a_nnt^{n-1}}
+\end{equation}
+so, putting $t=0$ we get
+\begin{equation}
+\frac{df}{dt}|_{t=0}=a_1
+\end{equation}
+Differentiating again gives
+\begin{equation}
+\frac{d^2f(t)}{dt^2}=2a_2+6a_3t+12a_4t^2\ldots=\sum_{n=1}^\infty{a_nn(n-1)t^{n-2}}
+\end{equation}
+so
+\begin{equation}
+\frac{1}{2}\frac{d^2f}{dt^2}|_{t=0}=a_2
+\end{equation}
+and so on.
+
+In fact, by this sort of calculation we see that
+\begin{equation}
+a_n=\frac{1}{n!}\left.\frac{d^nf}{dt^n}\right|_{t=0}
+\end{equation}
+or, put another way, 
+\begin{equation}
+f(t)=\sum_{n=0}^\infty\frac{1}{n!}\left.\frac{d^nf}{dt^n}\right|_{t=0}t^n
+\end{equation}
+This is the Taylor series. We haven't proven that $f(t)$ has a series
+of the form $\sum_{n=0}^\infty a_nt^n$ at all and not all functions
+do, in particular, if the function is badly behaved at $t=0$ it may
+not. We also haven't proved that the series converges. If we write
+\begin{equation}
+f(t)=\sum_{n=0}^{N-1}\frac{1}{n!}\left.\frac{d^nf}{dt^n}\right|_{t=0}t^n+E_N(t)
+\end{equation}
+where $E_N(t)$ represents the error from stopping at after $N$ terms,
+we might expect $E_N(t)$ vanishes as $N$ goes to infinity. In fact,
+this doesn't always happen and sometimes, even when the series does
+converge, it does so very slowly, so $E_N(t)$ remains large even for
+very large values of $N$. Frequently the series converges for some
+values of $t$ but not for others. Nonetheless, the Taylor series is
+often useful.
+
+You might already know the series expansion of $\exp{t}$, but lets
+calculate it as a Taylor series. Since
+\begin{equation}
+\frac{d}{dt}\exp{t}=\exp{t}
+\end{equation}
+we know
+\begin{equation}
+\frac{d^n}{dt^n}\exp{t}=\exp{t}
+\end{equation}
+or
+\begin{equation}
+\left.\frac{d^n}{dt^n}\exp{t}\right|_{t=0}=1
+\end{equation}
+for all $n$ so
+\begin{equation}
+f(t)=\sum_{n=0}^{\infty}\frac{1}{n!}t^n
+\end{equation}
+
+
+Next let's consider
+\begin{equation}
+f(t)=\sin{t}
+\end{equation}
+Now 
+\begin{equation}
+\frac{d}{dt}f(t)=\cos{t}
+\end{equation}
+and
+\begin{equation}
+\frac{d^2}{dt^2}f(t)=-\sin{t}
+\end{equation}
+and so on. Putting $t=0$ and using $\sin{0}=0$ and $\cos{0}=1$ we get
+\begin{equation}
+\sin{t}=\sum_{n\,\mbox{odd}}\frac{(-1)^{(n-1)/2}t^n}{n!}
+\end{equation}
+
+Finally, we have been expanding around $t=0$, but you can expand around any point, here we expand around $t=t_0$
+\begin{equation}
+f(t)=\sum_{n=0}^\infty\frac{1}{n!}\left.\frac{d^nf}{dt^n}\right|_{t=t_0}(t-t_0)^n
+\end{equation}
+or, writing $\epsilon=t-t_0$
+\begin{equation}
+f(t_0+\epsilon)=\sum_{n=0}^\infty\frac{1}{n!}\left.\frac{d^nf}{dt^n}\right|_{t=t_0}\epsilon^n
+\end{equation}
+
+\subsection*{Numerical solutions of differential equations}
+
+Consider the differential equation
+\begin{equation}
+\frac{df}{dt}=G(t,f)
+\end{equation}
+This class of differential equations would include the equation we looked at before:
+\begin{equation}
+\frac{df}{dt}=-\frac{1}{\tau}f
+\end{equation}
+with $G(f)=-f/\tau$ or
+\begin{equation}
+\frac{df}{dt}=\frac{1}{\tau}[g(t)-f]
+\end{equation}
+with $G(t,f)=(g-f)/\tau$. In fact, for most of this discussion we will
+restrict ourselves to the case where $G$ doesn't depend on $t$ except
+through $f$, this case is a small bit simpler.
+
+Now imagine we want to find numerical values for $f(t)$ where we know
+$f(0)=f_0$, some value, and
+\begin{equation}
+\frac{df}{dt}=G(f)
+\end{equation}
+Imagine further that we can't solve the equation analytically, so we
+resort to solving it approximately on the computer. This might be
+necessary because the equation is too hard to solve, or, in the case
+of the equation
+\begin{equation}
+\tau\frac{df}{dt}=g(t)-f(t)
+\end{equation}
+it might be that we don't know $g(t)$ analytically.
+
+The normal approach would be to discretize time and to work out the
+solution approximately for each time step in turn, depending on the
+previous time step. In other words, say we choose $\delta t$, a small
+value, as the time step then we would work out $f(\delta t)$, then use
+that to work out $f(2\delta t)$ and so on. Now, if $\delta t$ is
+small, then $\delta t^2$ will be smaller and $\delta t^3$ smaller
+still; the idea behind numerical solutions to differential equations
+is that we drop higher powers of $\delta t$.
+
+Let us use the notation $f_n=f(n\delta t)$ and consider how we might
+get a computer to work out $f_{n+1}$ approximately if $f_n$ is already
+known. Now, by the Taylor expansion
+\begin{equation}
+f(n\delta t+\delta t)=f(n\delta
+t)+\left.\frac{df}{dt}\right|_{t=n\delta t}\delta
+t+\frac{1}{2}\left.\frac{d^2f}{dt^2}\right|_{t=n\delta t}(\delta t)^2+\ldots
+\end{equation}
+so one simple approach is to ignore the $(\delta t)^2$ and smaller terms, since $df/dt=G(f)$ this gives
+\begin{equation}
+f_{n+1}=f_n+G(f_n)\delta t
+\end{equation}
+This approximation is known as the \textsl{Euler method}. A simple example is plotted in Fig.~1. 
+
+\begin{figure}
+\begin{center}
+\include{euler_approx}
+\end{center}
+\caption{A comparison of the Euler method with the true solution for
+  the equation $df/dt=rf$ with $r=0.5$. This equation in actually one
+  where the Euler method works quite well for modest values of $t$,
+  though the error always has the same sign and starts to accumulate,
+  here a large time step of $\delta t=0.2$ is used to emphasise the
+  error, the actual solution is plotted for comparison.}
+\end{figure}
+
+Since the Euler method takes into account the $\delta t$ part of the
+Taylor approximation but not the $\delta t^2$ term, we say it is
+accurate up to $O(\delta t^2)$, in other words
+\begin{equation}
+  f(t+\delta t)=\mbox{(Euler approximation)}+O(\delta t^2)
+\end{equation}
+where, roughly, the $O(\delta t^2)$ stands for stuff that behaves like
+$\delta t^2$ as $\delta t$ gets small.
+
+
+\subsection*{The Runge-Kutta method}
+
+The Runge-Kutta method uses the Taylor expansion in a clever way to
+find a better approximation than the Euler method. It is a bit
+convoluted, so there is a lot of notation, but it does give a very
+useful numerical algorithm. We are not going to explicitely derive the
+Runge-Kutta method here; you can see a longer discussion of where it
+comes from in \texttt{runge\_kutta.pdf} in the same notes. The key
+idea behind Runge-Kutta, as with Euler, is to find a way to
+approximate $f(t+\delta t)$, the Runge-Kutta approximation, however,
+accounts for more terms of the Taylor expansion. In fact, the fourth
+order Runge-Kutta we will describe here gets everything up to the
+fourth order, the errors are like $\delta t^5$:
+\begin{equation}
+  f(t+\delta t)=\mbox{(Runge-Kutta approximation)}+O(\delta t^5)
+\end{equation}
+
+So in the fourth order Runge Kutta approximation we have, as before
+\begin{equation}
+\frac{df}{dt}=G(f)
+\end{equation}
+and we calculate
+\begin{eqnarray}
+k_1&=&G(f_n)\cr
+k_2&=&G\left(f_n+\frac{1}{2}\delta tk_1\right)\cr 
+k_3&=&G\left(f_n+\frac{1}{2}\delta tk_2\right)\cr 
+k_4&=&G\left(f_n+\delta tk_3\right) 
+\end{eqnarray}
+then the approximation is
+\begin{equation}
+f_{n+1}=f_n+\frac{1}{6}(k_1+2k_2+2k_3+k_4)\delta t
+\end{equation}
+
+\begin{figure}
+\begin{center}
+\include{rk_approx}
+\end{center}
+\caption{A comparison of the fourth order Runge Kutta method with the
+  true solution for the growth equation. This has the same values of
+  $r$ and $\delta t$ as in Fig.~1, but the fourth order Runge-Kutta
+  method is used instead of the Euler method. As you can see, the
+  approximation and true solution are indistinguishable.}
+\end{figure}
+
+
+\end{document}
+

@@ -1,0 +1,95 @@
+\documentclass[12pt]{article}
+\usepackage{amsfonts, epsfig}
+
+\usepackage{graphicx}
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\lfoot{\texttt{COMS30127.github.io}}
+\lhead{Computation Neuroscience - rk\_note (b) - Conor}
+\rhead{\thepage}
+\cfoot{}
+\begin{document}
+
+\section*{A note on the derivation of the Runge Kutta formula\footnote{this is a supplementary note, it isn't examinable}} 
+
+
+The Runge-Kutta method uses the Taylor expansion in a clever way to
+find a better approximation than the Euler method. It is a bit
+convoluted, so there is a lot of notation, but it does give a very
+useful numerical algorithm.
+
+As before, we want to solve
+\begin{equation}
+\frac{df}{dt}=G(f)
+\end{equation}
+with a time discretization of $\delta t$, $f_n$ is the approximate
+value the algorithm calculates for $f(n\delta t)$ and $f_0=f(0)$, the
+initial condition. Now say we are at $f_n$ and let
+\begin{equation}
+k_1=G(f_n)
+\end{equation}
+so the Euler approximation would be $f_{n+1}=f_n+k_1\delta t$. Next, let
+\begin{equation}
+k_2=G\left(f_n+\frac{\delta t k_1}{2}\right)
+\end{equation}
+Now, using the Taylor expansion
+\begin{equation}
+k_2=G(f_n+\delta t k_1/2)=G(f_n)+\left.\frac{dG}{df}\right|_{f=f_n}\delta t\frac{k_1}{2}+\ldots
+\end{equation}
+Substituting back for $k_1$ this gives
+\begin{equation}
+k_2=G(f_n)+\frac{1}{2}\left.\frac{dG}{df}\right|_{f=f_n}\left.\frac{df}{dt}\right|_{t=t_n}\delta t+\ldots
+\end{equation}
+Using the chain rule
+\begin{equation}
+\frac{d^2f}{dt^2}=\frac{dG}{dt}=\frac{dG}{df}\frac{df}{dt}
+\end{equation}
+so
+\begin{equation}
+k_2=G(y_n)+\frac{1}{2}\frac{d^2f}{dt^2}\delta t+\ldots
+\end{equation}
+Now, recall
+\begin{equation}
+f(n\delta t + \delta t)=f_n+\left.\frac{df}{dt}\right|_{t=t_n}\delta t+\frac{1}{2}\left.\frac{d^2f}{dt^2}\right|_{t=t_n}\delta t^2+\ldots
+\end{equation}
+and from the formula for $k_1$ and $k_2$ we see that this can be written as
+\begin{equation}
+f_{n+1}=f_n+k_2\delta t
+\end{equation}
+This means that the calculation of $f_{n+1}$ takes into account
+more of the Taylor expansion than the Euler method, it includes the
+$\delta t^2$ part and so the errors will come in at $\delta t^3$.
+This is the \textsl{second order Runge Kutta method}, it is called
+second order because it includes the first and second order terms in
+the Taylor expansion, the Euler method is like a first order Runge
+Kutta method.
+
+The second order Runge Kutta method isn't usually used; it is the
+fourth order Runge Kutta that is considered the standard way of doing
+numerical integration. The idea is just the same as the one we saw
+above, by combining different terms more of the Taylor expansion is
+accounted for, in fact, as the name suggests, the fourth order Runge
+Kutta gets everything up to the fourth order, the errors are like
+$\delta t^5$.
+
+Here I will give the fourth order Runge Kutta and will include the
+possibility that the right hand side of the differential equation also
+includes a dependence on $t$ so, writing $t_n=n\delta t$
+\begin{equation}
+\frac{df}{dt}=G(t,f)
+\end{equation}
+Now
+\begin{eqnarray}
+k_1&=&G(t_n,f_n)\cr
+k_2&=&G\left(t_n+\frac{1}{2}\delta t,f_n+\frac{1}{2}\delta tk_1\right)\cr 
+k_3&=&G\left(t_n+\frac{1}{2}\delta t,f_n+\frac{1}{2}\delta tk_2\right)\cr 
+k_4&=&G\left(t_n+\delta t,f_n+\delta tk_3\right) 
+\end{eqnarray}
+and 
+\begin{equation}
+f_{n+1}=f_n+\frac{1}{6}(k_1+2k_2+2k_3+k_4)\delta t
+\end{equation}
+
+
+\end{document}
+
