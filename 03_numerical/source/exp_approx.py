@@ -2,6 +2,12 @@
 from math import *
 import matplotlib.pyplot as plt
 
+
+# here we use a class with an overloaded __call__ operator to define the
+# functions, a more elegant and pasimonious approach is to use
+# a function to define the functions, this is shown in the
+# programme less_simple_euler.py
+
 class F:
 
     def __init__(self,r):
