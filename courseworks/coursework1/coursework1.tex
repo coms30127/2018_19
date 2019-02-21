@@ -1,0 +1,68 @@
+\documentclass[12pt]{article}
+\usepackage{amsfonts, epsfig}
+
+\usepackage{graphicx}
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\lfoot{\texttt{https://github.com/coms30127}}
+\lhead{Computation Neuroscience - Coursework 1 - auto-associative networks}
+\rhead{\thepage}
+\cfoot{}
+\begin{document}
+
+\section*{Coursework 1}
+
+This coursework relates to the Hopfield network. In the \texttt{coursework1}
+folder you will find programmes \texttt{seven\_segment.jl} and
+\texttt{seven\_segment.py}. These contain a function for converting an
+11-component vector of ones and -1's into an old-fashioned
+seven-segment digit\footnote{\texttt{https://en.wikipedia.org/wiki/Seven-segment\_display}} and a number: the first seven digits correspond to
+the seven-segment display and the remaining four code for the number
+in a sort of binary where the zeros have been replaced with -1. It
+also contains three patterns: one, three and six.
+
+The goal of this coursework is to extend one or other of these
+programmes to include a Hopfield network to store these three
+patterns using the formula for $w_{ij}$ when $i\not=j$
+\begin{equation}
+w_{ij}=\frac{1}{N}\sum_a x_i^a x_j^a
+\end{equation}
+where $a$ labels patterns, $x_i^a$ is the activiation of the $i$th
+node in the $a$th pattern and $N$ is the number of
+patterns. $w_{ii}=0$.
+
+In the code there are also two test patterns, your programme should
+update these synchronously until convergence and print out the
+patterns at each iteration. 
+
+
+This coursework is intended to check you understand Hopfield networks,
+you are not being asked to do anything over elaborate beyond that. In
+summary you should:
+\begin{itemize}
+\item Create a weight matrix of $w_{ij}$s.
+\item Fix the weight values to store the three patterns.
+\item Write a function to evolve the network according to the
+  McCulloch-Pitts formula; this should be done synchronously so all the nodes are updated at each timestep.
+\item For each of the two test patterns, evolve the patterns until they stop changing, printing the pattern at each step.
+\end{itemize}
+
+
+
+
+\subsection*{COMSM20127}
+
+Add to the above a function to calculate the energy of a configuration
+\begin{equation}
+E=-\frac{1}{2}\sum_{ij} x_i w_{ij} x_j
+\end{equation}
+and print out the energy of the three learned patterns, of the test
+patterns and any patterns formed as the patterns are updated.
+
+\subsection*{Submission instructions}
+
+[We are finalising the submission instructions and will update this pdf shortly. The submission will likely be in the form of a brief 2 or 3 page report via SAFE.]
+
+The submission deadline is 5pm on Monday 11th March 2019.
+
+\end{document}
