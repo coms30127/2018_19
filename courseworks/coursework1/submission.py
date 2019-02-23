@@ -1,12 +1,19 @@
 #this will be the programme for creating your submission document
 #it is not finished yet
 
+
+from math import *
+import random as rnd
+
 class Submission:
     def __init__(self,filename):
         self.document=open(filename+".tex",'w')
+        self.segment_direction={6:"(0,0)--(1,0)",5:"(1.05,0.05)--(1.05,1.05)",4:"(-.05,0.05)--(-.05,1.05)",3:"(0,1.10)--(1,1.10)",2:"(1.05,1.15)--(1.05,2.15)",1:"(-.05,1.15)--(-.05,2.15)",0:"(0,2.20)--(1,2.20)"}
 
+        
     def header(self,candidate_name):
         self.document.write("\\documentclass[a4paper,fontsize=12pt]{scrartcl}\n")
+        self.document.write("\\usepackage{tikz}\n")
         self.document.write("\\begin{document}\n")
         self.document.write("\\section*{"+candidate_name+"}\n")
 
@@ -26,7 +33,43 @@ class Submission:
                 if i!=r-1:
                     self.document.write("&")
             self.document.write("\\\\")
-        self.document.write("\\end{array}\\right)$$")
+        self.document.write("\\end{array}\\right)$$\n")
+
+        
+    def seven_segment_display(self,pattern):
+        
+        self.document.write("\\begin{tikzpicture}\n")
+    
+        def write_draw(segment_status):
+
+            if segment_status==1:
+                self.document.write("\\draw[ultra thick,color=red]")
+            else:
+                self.document.write("\\draw[thick,color=lightgray]")
+
+
+        for segment,status in enumerate(pattern):
+            write_draw(status)
+            self.document.write(self.segment_direction[segment])
+            self.document.write(";\n")
+        
+        self.document.write("\\end{tikzpicture}\n")
+
+
+    def to_bool(self,a):
+        if a==1:
+            return True
+        return False
+
+    def seven_segment(self,pattern):
+        self.seven_segment_display(pattern[0:7])
+        number=0
+        for i,b in enumerate(map(self.to_bool,pattern[7:11])):
+            if b:
+                number+=pow(2,i)
+        self.document.write(str(int(number))+"\\qquad\n")
+               
+
 
         
     def bottomer(self):
@@ -37,11 +80,32 @@ class Submission:
 if __name__ == '__main__':
 
     matrix=[[i+j for j in range(0,4)] for i in range(0,3)]
-        
+    six=[1,1,-1,1,1,1,1,-1,1,1,-1]
+    three=[1,-1,1,1,-1,1,1,1,1,-1,-1]
+    one=[-1,-1,1,-1,-1,1,-1,1,-1,-1,-1]
+
+    
     submission=Submission("test")
+    
     submission.header("Aoife Citizen")
+    
     submission.section("matrix")
     submission.matrix_print("C",matrix)
+
+    submission.section("test patterns")
+    submission.seven_segment(six)
+    submission.seven_segment(three)
+    submission.seven_segment(one)
+
+    submission.section("pretending to evolve the pattern")
+
+    test_pattern=six[:]
+    
+    for i in range(0,7):
+        submission.seven_segment(test_pattern)
+        change=rnd.randint(0,len(test_pattern)-1)
+        test_pattern[change]*=-1
+    
     submission.bottomer()
     
         
