@@ -67,9 +67,17 @@ class Submission:
         for i,b in enumerate(map(self.to_bool,pattern[7:11])):
             if b:
                 number+=pow(2,i)
-        self.document.write(str(int(number))+"\\qquad\n")
-               
+        self.document.write(str(int(number))+"\n")
 
+    def cr(self):
+        self.document.write("\\\\")
+
+    def print_number(self,number):
+        self.document.write(" "+str(number)+" ")
+
+        
+    def qquad(self):
+        self.document.write("\\qquad\n ")
 
         
     def bottomer(self):
@@ -94,18 +102,40 @@ if __name__ == '__main__':
 
     submission.section("test patterns")
     submission.seven_segment(six)
+    submission.qquad()
     submission.seven_segment(three)
+    submission.qquad()
     submission.seven_segment(one)
 
     submission.section("pretending to evolve the pattern")
 
     test_pattern=six[:]
     
-    for i in range(0,7):
+    for i in range(0,10):
         submission.seven_segment(test_pattern)
+        submission.qquad()
+        if (i%6)==5:
+            submission.cr()
+            submission.cr()
         change=rnd.randint(0,len(test_pattern)-1)
         test_pattern[change]*=-1
+
+
+    submission.section("pretending to evolve the pattern with energies")
+
+    test_pattern=six[:]
     
+    for i in range(0,6):
+        submission.seven_segment(test_pattern)
+        submission.print_number(round(rnd.random(),4))
+        submission.qquad()
+        if (i%3)==2:
+            submission.cr()
+            submission.cr()
+        change=rnd.randint(0,len(test_pattern)-1)
+        test_pattern[change]*=-1
+
+        
     submission.bottomer()
     
         
