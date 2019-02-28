@@ -20,7 +20,7 @@ class Submission:
     def section(self,section_name):
         self.document.write("\\subsection*{"+section_name+"}\n")
         
-    def matrix_print(self,matrix_name,matrix,rounding=3):
+    def matrix_print(self,matrix_name,matrix,rounding=2):
         n=len(matrix)
         r=len(matrix[0])
         self.document.write("$$ "+matrix_name+"=\\left(\\begin{array}{")
@@ -72,8 +72,8 @@ class Submission:
     def cr(self):
         self.document.write("\\\\")
 
-    def print_number(self,number):
-        self.document.write(" "+str(number)+" ")
+    def print_number(self,number,rounding=3):
+        self.document.write(" "+str(round(number,rounding))+" ")
 
         
     def qquad(self):
