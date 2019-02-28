@@ -1,0 +1,26 @@
+
+You are to submit your code and a short pdf report.
+
+You are not required to write anything in the report, the report will
+be a pdf version of your programme's output, this will allow us to
+quickly see what your programme has output and, obviously, if it is
+correct we will read the code with less attention than if it has given
+the wrong output.
+
+There is code embedded in the template programme to make the report,
+it is in the commented out lines that mention submission.
+
+The submission functions are loaded at the start in the import
+submission lines.
+
+The submission functions make a latex file called "your_name.tex",
+obviously you should change this to your name. A latex file should
+compile to give a pdf file for submission.
+
+If you do not have latex installed on your computer then you can
+upload your latex file to overleaf.com, this will make the pdf for
+you.
+
+This is our first time using this system so if you have a question it
+is likely lots of people have the same question, so please ask it on
+the unit reddit.
