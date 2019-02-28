@@ -1,4 +1,9 @@
+#for the submission uncomment the submission statements
+#so submission.README
+
 from math import *
+
+#from submission import *
 
 def seven_segment(pattern):
 
@@ -48,7 +53,8 @@ def seven_segment(pattern):
             number+=pow(2,i)
     print(int(number))
         
-
+#submission=Submission("your_name")
+#submission.header("Your Name")
 
 six=[1,1,-1,1,1,1,1,-1,1,1,-1]
 three=[1,-1,1,1,-1,1,1,1,1,-1,-1]
@@ -58,19 +64,51 @@ seven_segment(three)
 seven_segment(six)
 seven_segment(one)
 
+##this assumes you have called your weight matrix "weight_matrix"
+#submission.section("Weight matrix")
+#submission.matrix_print("W",weight_matrix)
 
 print("test1")
+#submission.section("Test 1")
 
 test=[1,-1,1,1,-1,1,1,-1,-1,-1,-1]
 
+
 seven_segment(test)
+#submission.seven_segment(test)
+##for COMSM0027
+
+##where energy is the energy of test
+#submission.print_number(energy)
+
+##this prints a space
+#submission.qquad()
 
 #here the network should run printing at each step
+#for the final submission it should also output to submission on each step
 
 print("test2")
 
 test=[1,1,1,1,1,1,1,-1,-1,-1,-1]
+#submission.section("Test 1")
 
 seven_segment(test)
 
+
+#submission.seven_segment(test)
+
+##for COMSM0027
+##where energy is the energy of test
+#submission.print_number(energy)
+
+##this prints a space
+#submission.qquad()
+
 #here the network should run printing at each step
+#for the final submission it should also output to submission on each step
+
+
+#submission.bottomer()
+
+
+
