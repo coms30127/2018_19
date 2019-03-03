@@ -1,6 +1,4 @@
-#this will be the programme for creating your submission document
-#it is not finished yet
-
+#this is the programme for creating your submission document
 
 from math import *
 import random as rnd
