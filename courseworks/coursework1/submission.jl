@@ -51,7 +51,6 @@ function  matrix_print(document,matrix_name,matrix,rounding=2)
     for j in 1:n
         for i in 1:r
             entry=string(round(matrix[j,i],rounding))
-            println(entry)
             write(document,entry)
             if i!=r
                 write(document,"&")
@@ -86,23 +85,16 @@ function seven_segment(document::IOStream,pattern::Vector{Int64})
 end
 
 
+function cr(document::IOStream)
+        write(document,"\\\\")
+end
 
-f=open("./test.tex","w")
-
-header(f,"Aoife Citizen")
-section(f,"A matrix")
-example_matrix=rand(-1.0:0.01:2.0, 3, 4)
-matrix_print(f,"C",example_matrix)
-
-six=Int64[1,1,-1,1,1,1,1,-1,1,1,-1]
-three=Int64[1,-1,1,1,-1,1,1,1,1,-1,-1]
-one=Int64[-1,-1,1,-1,-1,1,-1,1,-1,-1,-1]
-
-seven_segment(f,three)
-
-
-
-bottomer(f)
-
-close(f)
+function print_number(document::IOStream,number::Float64,rounding=3)
+    rounded=round(number,rounding)
+    write(document," $rounded ")
+end
+        
+function qquad(document)
+    write(document,"\\qquad\n ")
+end
 

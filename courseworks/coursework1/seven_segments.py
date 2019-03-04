@@ -1,5 +1,5 @@
 #for the submission uncomment the submission statements
-#so submission.README
+#see submission.README
 
 from math import *
 
@@ -78,6 +78,7 @@ seven_segment(test)
 ##for COMSM0027
 
 ##where energy is the energy of test
+#submission.qquad()
 #submission.print_number(energy)
 
 ##this prints a space
@@ -87,7 +88,7 @@ seven_segment(test)
 #for the final submission it should also output to submission on each step
 
 print("test2")
-#submission.section("Test 1")
+#submission.section("Test 2")
 
 test=[1,1,1,1,1,1,1,-1,-1,-1,-1]
 
@@ -97,6 +98,7 @@ seven_segment(test)
 
 ##for COMSM0027
 ##where energy is the energy of test
+#submission.qquad()
 #submission.print_number(energy)
 
 ##this prints a space
