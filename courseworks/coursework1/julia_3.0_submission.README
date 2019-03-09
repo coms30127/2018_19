@@ -1,0 +1,11 @@
+
+The syntax for round changed between julia 0.6 and julia 1.0; for
+julia 0.7 both syntaxes work. Anyway, if you are using julia with a
+version >= 1.0 you need to change the round command in the submission
+programme to
+
+round(number,digits=rounding)
+
+I don't think it might be even more confusing to make two versions of
+the submission programme to deal with this, but sorry for any
+confusion!
