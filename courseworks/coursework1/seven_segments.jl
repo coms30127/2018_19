@@ -57,8 +57,8 @@ function seven_segment(pattern::Array{Int64})
         
 end
 
-f=open("./your_name.tex","w")
-header(f,"Your Name")
+#f=open("./your_name.tex","w")
+#header(f,"Your Name")
 
 six=Int64[1,1,-1,1,1,1,1,-1,1,1,-1]
 three=Int64[1,-1,1,1,-1,1,1,1,1,-1,-1]
