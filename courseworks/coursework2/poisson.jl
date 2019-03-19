@@ -1,4 +1,4 @@
-
+using Random: randexp
 
 function get_spike_train(rate::Float64,big_t::Float64,tau_ref::Float64)
 
@@ -9,7 +9,7 @@ function get_spike_train(rate::Float64,big_t::Float64,tau_ref::Float64)
 
     exp_rate=rate/(1-tau_ref*rate)
 
-    spike_train=Vector{Float64}(0)
+    spike_train=Vector{Float64}(undef,0)
 
     t=randexp(Float64)/exp_rate
 
