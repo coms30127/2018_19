@@ -1,3 +1,4 @@
+using DelimitedFiles: readdlm
 
 function load_data(filename,T)
 
